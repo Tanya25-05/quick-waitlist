@@ -1,16 +1,24 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useTransition, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Hourglass, LoaderCircle, Mail, User } from "lucide-react";
+import { Hourglass, LoaderCircle, Mail, User, Users } from "lucide-react";
 import { useState } from "react";
 
 const EmailForm = ({ date, title }: { date: string; title: string }) => {
   const [isPending, startTransaction] = useTransition();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/waitlist-count")
+      .then((res) => res.json())
+      .then((data) => setWaitlistCount(data.count))
+      .catch(() => {});
+  }, []);
 
   const handleClick = () => {
     setIsLoading(true);
@@ -71,6 +79,12 @@ const EmailForm = ({ date, title }: { date: string; title: string }) => {
           <Hourglass size={14} strokeWidth={2} aria-hidden="true" />
           {getDaysLeft()} days left
         </span>
+        {waitlistCount !== null && (
+          <span className="text-indigo-600 bg-indigo-100 px-2 py-1 rounded text-sm items-center flex gap-1 w-fit">
+            <Users size={14} strokeWidth={2} aria-hidden="true" />
+            {waitlistCount} people on waitlist
+          </span>
+        )}
         <h1 className="md:text-4xl text-3xl leading-tight font-semibold">
           {title}
         </h1>

@@ -26,7 +26,7 @@ export default function Home() {
       <img
         src={siteLogo}
         alt="logo"
-        className="w-auto h-25 mx-auto object-contain mb-5"
+        className="w-auto max-h-20 mx-auto object-contain mb-5"
       />
       <Card>
         <div className="grid md:grid-cols-2 md:divide-x divide-[#F0E4D2]">
